@@ -1,0 +1,47 @@
+Module LuhnChecker
+
+    Function LuhnCheck(ByVal number As String) As Boolean
+        Dim sum As Integer = 0
+        Dim isAlternate As Boolean = False
+        For i As Integer = number.Length - 1 To 0 Step -1
+            Dim digit As Integer = CInt(number.Substring(i, 1))
+            If isAlternate Then
+                digit *= 2
+                If digit > 9 Then
+                    digit -= 9
+                End If
+            End If
+            sum += digit
+            isAlternate = Not isAlternate
+        Next
+        Return sum Mod 10 = 0
+    End Function
+
+    Function CalculateChecksum(ByVal number As String) As Integer
+        Dim sum As Integer = 0
+        Dim isAlternate As Boolean = True
+        For i As Integer = number.Length - 1 To 0 Step -1
+            Dim digit As Integer = CInt(number.Substring(i, 1))
+            If isAlternate Then
+                digit *= 2
+                If digit > 9 Then
+                    digit -= 9
+                End If
+            End If
+            sum += digit
+            isAlternate = Not isAlternate
+        Next
+        Dim checksum As Integer = (10 - (sum Mod 10)) Mod 10
+        Return checksum
+    End Function
+
+    Sub Main()
+        Dim number As String = "4992739871"
+        Console.WriteLine("Is valid Luhn number? " & LuhnCheck(number))
+
+        Dim checksum As Integer = CalculateChecksum(number)
+        Console.WriteLine("Checksum (last digit to make valid Luhn): " & checksum)
+        Console.WriteLine("Next Luhn number: " & number & checksum)
+    End Sub
+
+End Module
